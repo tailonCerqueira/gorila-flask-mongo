@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="container-fluid">
+
+<h1>Cadastro</h1>
+
+<div class="col-md-12">
+    <form action="/books/create">
+        <div class="form-group">
+            <label for="nome">Nome</label>
+            <input type="text" placeholder="informe seu nome" id="nome" name="nome" class="form-control">
+        </div>
+        <div class="form-group">
+            <label for="idade">Idade</label>
+            <input type="text" placeholder="informe sua idade" id="idade" name="idade" class="form-control">
+        </div>
+        <div class="form-group">
+            <label for="sexo">Sexo</label>
+            <input type="text" placeholder="informe seu Sexo" id="sexo" name="sexo" class="form-control">
+        </div>
+        <div class="form-group">
+            <label for="localidade">Localidade</label>
+            <input type="text" placeholder="informe sua Localidade" id="localidade" name="localidade" class="form-control">
+        </div>
+        <div class="form-group">
+            <label for="telefone">Telefone</label>
+            <input type="text" placeholder="informe seu Telefone" id="telefone" name="telefone" class="form-control">
+        </div>
+        <div class="form-group">
+            <label for="email">Email</label>
+            <input type="text" placeholder="informe seu Email" id="email" name="email" class="form-control">
+        </div>
+        <div class="form-group">
+            <label for="especialidade">Especialidade</label>
+            <input type="text" placeholder="informe sua especialidade" id="especialidade" name="especialidade" class="form-control">
+        </div>
+        <div class="form-group">
+            <label for="pathImage">Imagme</label>
+            <input type="file" placeholder="Escolha uma imagem" id="pathImage" name="pathImage" class="form-control">
+        </div>
+        <div class="form-group">
+            <button type="submit"></button>
+        </div>
+    </form>
+</div>
+
+</div>
+
+
+{% endblock %}

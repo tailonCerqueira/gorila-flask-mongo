@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="col-lg-12">
+    <nav style="float: right; margin-bottom: 50px;" >
+        <a href="/profissionais/new" style="margin-right: 10px;" class="btn btn-primary">Criar um novo profissinal</a>
+        <a href="/profissionais" class="btn btn-primary">Listar profissionais</a>
+    </nav>    
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Nome</th>
+                <th>Idade</th>
+                <th>Sexo</th>
+                <th>Localidade</th>
+                <th>Telefone</th>
+                <th>Email</th>
+                <th>Especialidade</th>
+                <th>Ações</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            <tr>
+                <td>{{ profissional._id }}</td>
+                <td>{{ profissional.nome }}</td>
+                <td>{{ profissional.idade }}</td>
+                <td>{{ profissional.sexo }}</td>
+                <td>{{ profissional.localidade }}</td>
+                <td>{{ profissional.telefone }}</td>
+                <td>{{ profissional.email }}</td>
+                <td>{{ profissional.especialidade }}</td>
+                <td><a href="#">Editar</a></td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+
+{% endblock %}
