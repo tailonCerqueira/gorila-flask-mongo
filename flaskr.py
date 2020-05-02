@@ -2,9 +2,11 @@ from flask import Flask, render_template, request, redirect, url_for, jsonify
 from pymongo import MongoClient, DESCENDING, ASCENDING
 from bson.objectid import ObjectId
 import settings as st
+from flask_cors import CORS
+
 
 app = Flask(__name__)
-
+CORS(app)
 #Conexão com o banco
 client      = MongoClient(st.DB_URL, int(st.DB_PORT))
 conn        = client[st.DB_COLLECTION]
@@ -15,6 +17,18 @@ collection  = conn.profissional
 tb_avaliacao = conn.avaliacao
 tb_agenda = conn.agenda
 ############################
+
+
+
+
+
+
+
+#cadastra novo cliente
+@app.route('/cliente/create', methods = ['GET','POST'])
+def new_cliente():
+    response = request.args 
+    return jsonify(response="ok")
 
 #redirecionar para cadastro de profissional
 @app.route('/profissionais/new', methods = ['GET', 'POST'])
