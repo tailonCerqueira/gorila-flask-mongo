@@ -2,7 +2,18 @@
 
 {% block content %}
 
-<h1>Home Mentor</h1>
+    <div class="alert alert-success" role="alert">
+        <h4 class="alert-heading">Destaques</h4>
+    </div>
 
+    {% for profisional in profissionais %}
+        <div class="card" style="width: 18rem;">
+            <div class="card-body">
+            <h5 class="card-title">{{ profisional.nome }}</h5>
+            <p class="card-text"></p>
+            <a href="#" class="btn btn-primary">Visualize o perfil</a>
+            </div>
+        </div>
+    {% endfor %}
 
 {% endblock %}

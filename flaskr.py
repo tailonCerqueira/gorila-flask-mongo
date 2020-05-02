@@ -9,17 +9,23 @@ client      = MongoClient('localhost', 27017)
 conn        = client['app_gorila']
 collection  = conn.profissional
 
-
-#mentor = collection.profissional
+############################
+#outras rotass
 
 ############################
-#rota padrão é a rota de login
+#rota para a tela de login
 @app.route('/', methods = ['GET'])
 def index():
-    return render_template('main/login.html')
+    return render_template('/main/login.html')
+
+#rota padrão é a rota de login
+@app.route('/profissionais/home', methods = ['GET'])
+def home():
+    return render_template('/main/profissional/home.html')
+
+############################
 
 #redirecionar para cadastro de profissional
-
 @app.route('/profissionais/new', methods = ['GET', 'POST'])
 def new():
      return render_template('/main/profissional/new.html')
@@ -35,26 +41,26 @@ def create():
         'telefone': request.form['telefone'],
         'email': request.form['email'],
         'especialidade': request.form['especialidade'],
-     
-        #'idAgenda': request.form[idAngeda], 
-        #'idAvaliacao': request.from['idAvaliacao']
     })
 
     return redirect(url_for('index'))
 
+#lista profissionais
 @app.route('/profissionais', methods=['GET', 'POST'])
 def findAll():
     list_collection  = collection.find()
     return render_template('/main/profissional/list.html', profissionais = list_collection )    
 
-@app.route('/profissionais/<id>')
+#busca um profissional por ID
+@app.route('/profissionais/<id>', methods=['GET', 'POST'])
 def findOne(id):
     data = collection.find_one({
         "_id": ObjectId(id)
     })
     return render_template('/main/profissional/viewProfisisonal.html', profissional = data)
 
-@app.route('/profissionais/delete/<id>', methods=['GET', 'POST'])
+#excluir um profissional por ID
+@app.route('/profissionais/delete/<id>', methods=['GET', 'POST', 'DELETE'])
 def delete(id):
     data = collection.delete_many({
         "_id": ObjectId(id)
@@ -62,13 +68,35 @@ def delete(id):
     
     return redirect(url_for('findAll'))
 
+#exibir um profissional para edição
+@app.route('/profissionais/edit/<id>', methods=['GET', 'POST'])
+def edit(id):
+    data = collection.find_one({
+        "_id": ObjectId(id)
+    })
+    return render_template('/main/profissional/edit.html', profissional = data)
 
+#editar um profissional por ID
+@app.route('/profissionais/update/<id>', methods=['GET', 'POST', 'PUT'])
+def update(id):
+    collection.update_one({
+            "_id": ObjectId(id)
+        },
+        {
+            '$set':{
+                'nome': request.form['nome'],
+                'idade': request.form['idade'], 
+                'sexo': request.form['sexo'],
+                'localidade': request.form['localidade'],
+                'telefone': request.form['telefone'],
+                'email': request.form['email'],
+                'especialidade': request.form['especialidade'],     
+            }        
+        }        
+    )    
 
-
-#rotas cliente
-@app.route('/cliente')
-def indexCliente():
-    return render_template('main/home.html')
+    return redirect(url_for('findAll'))
+    
 
 
 #endrotas

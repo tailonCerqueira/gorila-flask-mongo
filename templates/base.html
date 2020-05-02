@@ -7,18 +7,28 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
 </head>
 <body>
-    <div class="col-md-12">
-        <header>
-            <h1 class="">Header</h1>
-        </header>
+    <header style="margin-bottom: 50px;">
+        <!-- Just an image -->
+        <nav class="navbar navbar-light bg-light">
+            <a class="navbar-brand" href="#">
+            <img src="https://getbootstrap.com/docs/4.4/assets/brand/bootstrap-solid.svg" width="30" height="30" alt="">
+            </a>
+            <a href={{ url_for('index') }}>Home</a>
+        </nav>
+    </header>
+
+    <div class="container-fluid">
+        <div class="col-md-12">
+            {% block content %}{% endblock %}
+        </div>
     </div>
 
-    <div class="col-md-12">
-        {% block content %}{% endblock %}
+    <div class="container-fluid"></div>
+        <div class="col-md-12">
+            <footer></footer>
+        </div>
     </div>
-    <div class="col-md-12">
-        <footer>Footer</footer>
-    </div>
+
     <script
 			  src="https://code.jquery.com/jquery-3.5.0.min.js"
 			  integrity="sha256-xNzN2a4ltkB44Mc/Jz3pT4iU1cmeR0FkXs4pru/JxaQ="

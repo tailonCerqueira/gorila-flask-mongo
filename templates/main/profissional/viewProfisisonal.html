@@ -9,7 +9,6 @@
     <table class="table table-striped">
         <thead>
             <tr>
-                <th>Id</th>
                 <th>Nome</th>
                 <th>Idade</th>
                 <th>Sexo</th>
@@ -23,7 +22,6 @@
 
         <tbody>
             <tr>
-                <td>{{ profissional._id }}</td>
                 <td>{{ profissional.nome }}</td>
                 <td>{{ profissional.idade }}</td>
                 <td>{{ profissional.sexo }}</td>
@@ -31,7 +29,13 @@
                 <td>{{ profissional.telefone }}</td>
                 <td>{{ profissional.email }}</td>
                 <td>{{ profissional.especialidade }}</td>
-                <td><a href="#">Editar</a></td>
+                <td class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Ações</a>
+                    <div class="dropdown-menu">
+                        <a class="dropdown-item" href={{ url_for('edit', id = profissional._id) }} class="btn btn-primary btn-sm">Editar</a>                                                                                 
+                        <a class="dropdown-item" href={{ url_for('delete', id = profissional._id) }} class="btn btn-primary btn-sm">Del</a>
+                    </div>                        
+                </td>     
             </tr>
         </tbody>
     </table>
