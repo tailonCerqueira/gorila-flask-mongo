@@ -5,15 +5,20 @@
     <div class="alert alert-success" role="alert">
         <h4 class="alert-heading">Destaques</h4>
     </div>
-
-    {% for profisional in profissionais %}
-        <div class="card" style="width: 18rem;">
-            <div class="card-body">
-            <h5 class="card-title">{{ profisional.nome }}</h5>
-            <p class="card-text"></p>
-            <a href="#" class="btn btn-primary">Visualize o perfil</a>
-            </div>
+    <div class="col-md-12">
+        <div class="row">
+            {% for profisional in profissionais_by_rating %}
+                <div class="col-md-3">
+                    <div class="card" style="width: 18rem;">
+                        <div class="card-body">
+                        <h5 class="card-title">Nome</h5>
+                        <p class="card-text">Avaliação: {{ profisional.rating }}</p>
+                        <a href={{ url_for('findOne', id = profisional.idPorfissional) }} class="btn btn-primary">Visualize o perfil</a>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}    
         </div>
-    {% endfor %}
+    </div>
 
 {% endblock %}

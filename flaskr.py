@@ -1,5 +1,5 @@
-from flask import Flask, render_template, request, redirect, url_for
-from pymongo import MongoClient
+from flask import Flask, render_template, request, redirect, url_for, jsonify
+from pymongo import MongoClient, DESCENDING, ASCENDING
 from bson.objectid import ObjectId
 
 app = Flask(__name__)
@@ -7,22 +7,11 @@ app = Flask(__name__)
 #Conexão com o banco
 client      = MongoClient('localhost', 27017)
 conn        = client['app_gorila']
+
+############################
+#instanciação do documento
 collection  = conn.profissional
-
-############################
-#outras rotass
-
-############################
-#rota para a tela de login
-@app.route('/', methods = ['GET'])
-def index():
-    return render_template('/main/login.html')
-
-#rota padrão é a rota de login
-@app.route('/profissionais/home', methods = ['GET'])
-def home():
-    return render_template('/main/profissional/home.html')
-
+tb_avaliacao = conn.avaliacao
 ############################
 
 #redirecionar para cadastro de profissional
@@ -96,7 +85,42 @@ def update(id):
     )    
 
     return redirect(url_for('findAll'))
-    
+###########  
+###########
+###########
+#criar avaliacao profissional
+@app.route('/profissinais/newRating',  methods=['GET', 'POST'])
+def createCliente():
+    tb_avaliacao.insert_one({
+        'idPorfissional': 3,
+        'idCliente': 3, 
+        'rating': 7
+    })
+
+    return redirect(url_for('index'))
+###########
+
+#redirecionar para cadastro de cliente
+@app.route('/cliente/new', methods = ['GET', 'POST'])
+def newCliente():
+     return render_template('/main/cliente/new.html')
+
+############################
+#outras rotass
+
+############################
+#rota para a tela de login
+@app.route('/', methods = ['GET'])
+def index():
+    return render_template('/main/login.html')
+
+#rota home
+@app.route('/profissionais/home', methods = ['GET'])
+def home():
+    #Consulta par exibir todas os mais bem avaliados
+    profissionais = tb_avaliacao.find().sort("rating", DESCENDING).limit(4)
+    return render_template('/main/profissional/home.html', profissionais_by_rating = profissionais)
+
 
 
 #endrotas
