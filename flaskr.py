@@ -1,12 +1,13 @@
 from flask import Flask, render_template, request, redirect, url_for, jsonify
 from pymongo import MongoClient, DESCENDING, ASCENDING
 from bson.objectid import ObjectId
+import settings as st
 
 app = Flask(__name__)
 
 #Conexão com o banco
-client      = MongoClient('localhost', 27017)
-conn        = client['app_gorila']
+client      = MongoClient(st.DB_URL, int(st.DB_PORT))
+conn        = client[st.DB_COLLECTION]
 
 ############################
 #instanciação do documento
@@ -150,4 +151,5 @@ def saveAgenda():
 #endrotas
 
 if __name__ == '__main__':
-    app.run()
+    app.debug = True
+    app.run( host = st.HOST,port = st.PORT)
