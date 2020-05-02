@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<h1>Cadastro</h1>
+<form action="/profissionais/agenda/save" method="POST">
+    <div class="form-group">
+        <label for="nome">Profissional</label>
+        <input type="text" placeholder="informe seu nome" id="nome" name="nome" class="form-control">
+    </div>
+    <div class="form-group">
+        <label for="horario_inicio">Horário Início</label>
+        <input type="datetime" placeholder="Horário de Início" id="horario_inicio" name="horario_inicio" class="form-control">
+    </div>
+    <div class="form-group">
+        <label for="horario_fim">Horário Fim</label>
+        <input type="datetime" placeholder="Horário Final" id="horario_fim" name="horario_fim" class="form-control">
+    </div>
+  
+
+    <div class="form-group">
+        <button type="submit" class="btn btn-primary">Salvar</button>
+    </div>
+</form>
+
+
+{% endblock %}

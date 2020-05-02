@@ -12,6 +12,7 @@ conn        = client['app_gorila']
 #instanciação do documento
 collection  = conn.profissional
 tb_avaliacao = conn.avaliacao
+tb_agenda = conn.agenda
 ############################
 
 #redirecionar para cadastro de profissional
@@ -67,6 +68,8 @@ def edit(id):
 
 #editar um profissional por ID
 @app.route('/profissionais/update/<id>', methods=['GET', 'POST', 'PUT'])
+
+
 def update(id):
     collection.update_one({
             "_id": ObjectId(id)
@@ -121,7 +124,28 @@ def home():
     profissionais = tb_avaliacao.find().sort("rating", DESCENDING).limit(4)
     return render_template('/main/profissional/home.html', profissionais_by_rating = profissionais)
 
+#rota agenda
+@app.route('/profissionais/agenda', methods = ['GET'])
+def agenda():
+    return render_template('/main/profissional/agenda.html')
 
+#rota para criar agenda
+@app.route('/profissionais/agenda/new', methods = ['GET'])
+def newAgenda():
+    return render_template('/main/profissional/newAgenda.html')
+
+#rota para salvar agenda
+@app.route('/profissionais/agenda/save', methods = ['GET', 'POST'])
+def saveAgenda():
+    tb_agenda.insert_one({
+        'idPorfissional': 1,
+        'clientesAgendados': {
+            'idCliente': 1,
+            'horario_inicio': request.form['horario_inicio'],
+            'horario_fim': request.form['horario_fim'],
+        }
+    })
+    return redirect(url_for('home'))
 
 #endrotas
 
