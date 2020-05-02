@@ -14,6 +14,7 @@ conn        = client[st.DB_COLLECTION]
 ############################
 #instanciação do documento
 collection  = conn.profissional
+collection_cliente  = conn.cliente
 tb_avaliacao = conn.avaliacao
 tb_agenda = conn.agenda
 ############################
@@ -28,7 +29,38 @@ tb_agenda = conn.agenda
 @app.route('/cliente/create', methods = ['GET','POST'])
 def new_cliente():
     response = request.args 
-    return jsonify(response="ok")
+    bd_response = collection_cliente.insert_one({
+        'nome': response['nome'],
+        'idade': response['idade'], 
+        'sexo': response['sexo'],
+        'localidade': response['localidade'],
+        'telefone': response['telefone'],
+        'email': response['email'],
+        'path_imagem': response['path_image'],
+        'perfil_investimento': response['perfil']
+    })
+    
+    if bd_response:
+        return jsonify(result="created"),201
+    else:
+        return jsonify(result="error")
+        
+#desvincula profissional de cliente
+@app.route('/cliente/remover/profissional/<id>', methods = ['GET','POST'])
+def cliente_remove_profissional(id):
+    bd_response = collection_cliente.update_one({
+            "_id": ObjectId(id)
+        },{
+              '$unset': {
+                      'idProfissional': ""
+                        }
+              }, upsert=False)
+    if bd_response:
+        return jsonify(result="removed"),200
+    else:
+        return jsonify(result="error")
+        
+
 
 #redirecionar para cadastro de profissional
 @app.route('/profissionais/new', methods = ['GET', 'POST'])
