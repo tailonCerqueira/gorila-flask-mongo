@@ -361,6 +361,7 @@ def solicitarMentoria():
     else:
         return jsonify(result="error")
 
+
 #_Professional reject request to client 
 @app.route('/solicitacao/rejeitar/<id>', methods=['GET', 'POST', 'DELETE'])
 def rejeitarMentoria(id):
@@ -373,12 +374,30 @@ def rejeitarMentoria(id):
         return jsonify(result=page_sanitized),200
     else:
         return jsonify(result="error")
-#endrotas
+
+#_Professional acept request to client 
+@app.route('/solicitacao/aceitar/<id>', methods=['GET', 'POST', 'PUT'])
+def rejeitarMentoria(id):
+    bd_response = tb_solicitacao.update_one(
+        {'_id': ObjectId(id)},
+        {
+            '$set':{
+                'status': request.form['status'],
+            }
+        }
+    )
+
+    if bd_response:
+        page_sanitized = json.loads(json_util.dumps(bd_response))
+        return jsonify(result=page_sanitized),200
+    else:
+        return jsonify(result="error")
+
 
 #_Search requests actives
  @app.route('/solicitacao/findByActives/<id>', methods=['GET', 'POST'])
 def edit(id):
-    data = collection.find_one({
+    data = tb_solicitacao.find_one({
         "_id": ObjectId(id)
     })
     if bd_response:
@@ -387,6 +406,8 @@ def edit(id):
     else:
         return jsonify(result="error")
 
+
+#endrotas
 if __name__ == '__main__':
     app.debug = True
     app.run( host = st.HOST,port = st.PORT)
