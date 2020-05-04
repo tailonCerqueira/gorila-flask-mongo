@@ -19,6 +19,7 @@ collection  = conn.profissional
 collection_cliente  = conn.cliente
 tb_avaliacao = conn.avaliacao
 tb_agenda = conn.agenda
+tb_solicitacao = conn.solicitacao
 ############################
 
 
@@ -345,7 +346,33 @@ def deleteAgenda(id):
     else:
         return jsonify(result="error")
     
+#_Professional send request to client 
+@app.route('/solicitacao/nova', methods=['GET', 'POST'])
+def solicitarMentoria():
+    bd_response = tb_solicitacao.insert_one({
+        'idProfissional': request.form['idProfissional'],
+        'idCliente': request.form['idCliente'],
+        'status': request.form['status'],
+    })
 
+    if bd_response:
+        page_sanitized = json.loads(json_util.dumps(bd_response))
+        return jsonify(result=page_sanitized),200
+    else:
+        return jsonify(result="error")
+
+#_Professional reject request to client 
+@app.route('/solicitacao/rejeitar/<id>', methods=['GET', 'POST', 'DELETE'])
+def rejeitarMentoria(id):
+    bd_response = tb_solicitacao.delete_many({
+        "_id": ObjectId(id)
+    })
+
+    if bd_response:
+        page_sanitized = json.loads(json_util.dumps(bd_response))
+        return jsonify(result=page_sanitized),200
+    else:
+        return jsonify(result="error")
 #endrotas
 
 
