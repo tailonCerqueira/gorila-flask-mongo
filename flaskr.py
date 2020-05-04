@@ -3,6 +3,7 @@ from pymongo import MongoClient, DESCENDING, ASCENDING
 from bson.objectid import ObjectId
 import settings as st
 from flask_cors import CORS
+import json
 
 
 app = Flask(__name__)
@@ -22,16 +23,13 @@ tb_agenda = conn.agenda
 
 
 
-
-
-
-#Redirec to register professional
+#cadastra novo cliente
 @app.route('/cliente/create', methods = ['GET','POST'])
 def new_cliente():
-    response = request.args 
+    response = request.args
     bd_response = collection_cliente.insert_one({
         'nome': response['nome'],
-        'idade': response['idade'], 
+        'idade': response['idade'],
         'sexo': response['sexo'],
         'localidade': response['localidade'],
         'telefone': response['telefone'],
@@ -39,12 +37,73 @@ def new_cliente():
         'path_imagem': response['path_image'],
         'perfil_investimento': response['perfil']
     })
-    
+
     if bd_response:
         return jsonify(result="created"),201
     else:
         return jsonify(result="error")
-        
+
+
+#seta perfil cliente
+@app.route('/cliente/set/perfil', methods = ['POST'])
+def cliente_set_perfil():
+    response = request.args
+    bd_response = collection_cliente.update_one({
+
+    "_id": ObjectId(response['id'])
+        },{
+              '$set': {
+                      'perfil_investimento':response['perfil'].lower()
+                        }
+              }, upsert=False)
+
+    if bd_response:
+        return jsonify(result="sucess"),200
+    else:
+        return jsonify(result="error")
+
+
+#seta mentor cliente
+@app.route('/cliente/mentores/<id>', methods = ['POST'])
+def get_mentores(id):
+
+    bd_response = collection_cliente.aggregate([
+    {
+        '$match': {
+            'nome': 'goku'
+        }
+    }, {
+        '$lookup': {
+            'from': 'profissional',
+            'localField': 'perfil_investimento',
+            'foreignField': 'especialidade',
+            'as': 'perfil_compativel'
+        }
+    }, {
+        '$project': {
+            '_id': 0,
+            'nome': 0,
+            'idade': 0,
+            'sexo': 0,
+            'localidade': 0,
+            'telefone': 0,
+            'email': 0,
+            'path_imagem': 0,
+            'perfil_investimento': 0
+        }
+    }
+    ])
+    if bd_response:
+        result   = []
+        for i in bd_response:
+            result.append(i)
+
+        result = json.loads(json_util.dumps(result))
+        return jsonify(result=result),200
+    else:
+        return jsonify(result="error")
+
+
 #desvincula profissional de cliente
 @app.route('/cliente/remover/profissional/<id>', methods = ['GET','POST'])
 def cliente_remove_profissional(id):
@@ -59,8 +118,21 @@ def cliente_remove_profissional(id):
         return jsonify(result="removed"),200
     else:
         return jsonify(result="error")
-        
 
+#vincula profissional ao cliente
+@app.route('/cliente/<id_cliente>/adicionar/profissional/<id_profissional>', methods = ['GET','POST'])
+def cliente_adicionar_profissional(id_cliente,id_profissional):
+    bd_response = collection_cliente.update_one({
+            "_id": ObjectId(id_cliente)
+        },{
+              '$set': {
+                      'id_profissional':id_profissional
+                        }
+              }, upsert=False)
+    if bd_response:
+        return jsonify(result="sucess"),200
+    else:
+        return jsonify(result="error")
 
 #Register new professional
 @app.route('/profissionais/new', methods = ['GET', 'POST'])
@@ -72,7 +144,7 @@ def new():
 def create():
     collection.insert_one({
         'nome': request.form['nome'],
-        'idade': request.form['idade'], 
+        'idade': request.form['idade'],
         'sexo': request.form['sexo'],
         'localidade': request.form['localidade'],
         'telefone': request.form['telefone'],
@@ -86,7 +158,7 @@ def create():
 @app.route('/profissionais', methods=['GET', 'POST'])
 def findAll():
     list_collection  = collection.find()
-    return render_template('/main/profissional/list.html', profissionais = list_collection )    
+    return render_template('/main/profissional/list.html', profissionais = list_collection )
 
 #Searching for a professional by ID
 @app.route('/profissionais/<id>', methods=['GET', 'POST'])
@@ -102,7 +174,7 @@ def delete(id):
     data = collection.delete_many({
         "_id": ObjectId(id)
     })
-    
+
     return redirect(url_for('findAll'))
 
 #Show a profissional to edition
@@ -122,18 +194,18 @@ def update(id):
         {
             '$set':{
                 'nome': request.form['nome'],
-                'idade': request.form['idade'], 
+                'idade': request.form['idade'],
                 'sexo': request.form['sexo'],
                 'localidade': request.form['localidade'],
                 'telefone': request.form['telefone'],
                 'email': request.form['email'],
-                'especialidade': request.form['especialidade'],     
-            }        
-        }        
-    )    
+                'especialidade': request.form['especialidade'],
+            }
+        }
+    )
 
     return redirect(url_for('findAll'))
-###########  
+###########
 ###########
 ###########
 #Create professional assessment
@@ -141,7 +213,7 @@ def update(id):
 def createCliente():
     tb_avaliacao.insert_one({
         'idPorfissional': 3,
-        'idCliente': 3, 
+        'idCliente': 3,
         'rating': 7
     })
 
@@ -223,10 +295,12 @@ def deleteAgenda(id):
     data = tb_agenda.delete_many({
         "_id": ObjectId(id)
     })
-    
+
     return redirect(url_for('findAll'))
 
 #endrotas
+
+
 
 if __name__ == '__main__':
     app.debug = True
