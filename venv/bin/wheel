@@ -1,4 +1,4 @@
-#!/home/pi/Documents/python/gorila/env/bin/python
+#!/home/pi/Documents/python/gorila-flask-mongo/venv/bin/python
 # -*- coding: utf-8 -*-
 import re
 import sys
