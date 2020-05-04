@@ -69,7 +69,7 @@ def get_mentores(id):
     bd_response = collection_cliente.aggregate([
     {
         '$match': {
-            'nome': 'goku'
+            "_id": ObjectId(id)
         }
     }, {
         '$lookup': {
