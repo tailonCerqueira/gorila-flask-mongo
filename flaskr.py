@@ -65,7 +65,9 @@ def edit(id):
         "_id": ObjectId(id)
     })
     return render_template('/main/profissional/edit.html', profissional = data)
-
+    
+#Edit a profissional By ID
+@app.route('/profissionais/update/<id>', methods=['GET', 'POST', 'PUT'])
 def update(id):
     collection.update_one({
             "_id": ObjectId(id)
