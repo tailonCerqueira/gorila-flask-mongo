@@ -375,7 +375,17 @@ def rejeitarMentoria(id):
         return jsonify(result="error")
 #endrotas
 
-
+#_Search requests actives
+ @app.route('/solicitacao/findByActives/<id>', methods=['GET', 'POST'])
+def edit(id):
+    data = collection.find_one({
+        "_id": ObjectId(id)
+    })
+    if bd_response:
+        page_sanitized = json.loads(json_util.dumps(bd_response))
+        return jsonify(result=page_sanitized),200
+    else:
+        return jsonify(result="error")
 
 if __name__ == '__main__':
     app.debug = True
