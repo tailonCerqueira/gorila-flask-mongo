@@ -390,7 +390,7 @@ def rejeitarMentoria(id):
 
 #_Professional acept request to client 
 @app.route('/solicitacao/aceitar/<id>', methods=['GET', 'POST', 'PUT'])
-def rejeitarMentoria(id):
+def aceitarMentoria(id):
     bd_response = tb_solicitacao.update_one(
         {'_id': ObjectId(id)},
         {
