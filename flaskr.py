@@ -43,6 +43,19 @@ def new_cliente():
     else:
         return jsonify(result="error")
 
+#_List clients
+@app.route('/clients', methods=['GET', 'POST'])
+def findAll():
+    bd_response  = collection_cliente.find()
+    if bd_response:
+        result   = []
+        for i in bd_response:
+            result.append(i)
+
+        result = json.loads(json_util.dumps(result))
+        return jsonify(result=result),200
+    else:
+        return jsonify(result="error")
 
 #_seta perfil cliente
 @app.route('/cliente/set/perfil', methods = ['POST'])
