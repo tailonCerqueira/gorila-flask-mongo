@@ -409,7 +409,7 @@ def aceitarMentoria(id):
 
 #_Search requests actives
 @app.route('/solicitacao/findByActives/<id>', methods=['GET', 'POST'])
-def edit(id):
+def editSolicitacao(id):
     data = tb_solicitacao.find_one({
         "_id": ObjectId(id)
     })
