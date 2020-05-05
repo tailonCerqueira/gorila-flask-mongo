@@ -45,7 +45,7 @@ def new_cliente():
 
 #_List clients
 @app.route('/clients', methods=['GET', 'POST'])
-def findAll():
+def findAllClients():
     bd_response  = collection_cliente.find()
     if bd_response:
         result   = []
