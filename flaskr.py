@@ -362,15 +362,16 @@ def deleteAgenda(id):
 #_Professional send request to client 
 @app.route('/solicitacao/nova', methods=['GET', 'POST'])
 def solicitarMentoria():
+    response = request.args
     bd_response = tb_solicitacao.insert_one({
-        'idProfissional': request.form['idProfissional'],
-        'idCliente': request.form['idCliente'],
-        'status': request.form['status'],
+        'idProfissional': response['idProfissional'],
+        'idCliente': response['idCliente'],
+        'status': response['status'],
     })
 
     if bd_response:
-        page_sanitized = json.loads(json_util.dumps(bd_response))
-        return jsonify(result=page_sanitized),200
+        #page_sanitized = json.loads(json_util.dumps(bd_response))
+        return jsonify(result="sucess"),200
     else:
         return jsonify(result="error")
 
@@ -378,31 +379,33 @@ def solicitarMentoria():
 #_Professional reject request to client 
 @app.route('/solicitacao/rejeitar/<id>', methods=['GET', 'POST', 'DELETE'])
 def rejeitarMentoria(id):
+    #response = request.args
     bd_response = tb_solicitacao.delete_many({
         "_id": ObjectId(id)
     })
 
     if bd_response:
-        page_sanitized = json.loads(json_util.dumps(bd_response))
-        return jsonify(result=page_sanitized),200
+        #page_sanitized = json.loads(json_util.dumps(bd_response))
+        return jsonify(result="sucess"),200
     else:
         return jsonify(result="error")
 
 #_Professional acept request to client 
 @app.route('/solicitacao/aceitar/<id>', methods=['GET', 'POST', 'PUT'])
 def aceitarMentoria(id):
+    response = request.args
     bd_response = tb_solicitacao.update_one(
         {'_id': ObjectId(id)},
         {
             '$set':{
-                'status': request.form['status'],
+                'status': response['status'],
             }
         }
     )
 
     if bd_response:
-        page_sanitized = json.loads(json_util.dumps(bd_response))
-        return jsonify(result=page_sanitized),200
+        #page_sanitized = json.loads(json_util.dumps(bd_response))
+        return jsonify(result="sucess"),200
     else:
         return jsonify(result="error")
 
@@ -410,12 +413,12 @@ def aceitarMentoria(id):
 #_Search requests actives
 @app.route('/solicitacao/findByActives/<id>', methods=['GET', 'POST'])
 def editSolicitacao(id):
-    data = tb_solicitacao.find_one({
+    bd_response = tb_solicitacao.find_one({
         "_id": ObjectId(id)
     })
     if bd_response:
-        page_sanitized = json.loads(json_util.dumps(bd_response))
-        return jsonify(result=page_sanitized),200
+        #page_sanitized = json.loads(json_util.dumps(bd_response))
+        return jsonify(result="Sucess"),200
     else:
         return jsonify(result="error")
 
