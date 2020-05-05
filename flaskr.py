@@ -261,14 +261,14 @@ def update(id):
 #_Create professional assessment
 @app.route('/profissinais/newRating',  methods=['GET', 'POST'])
 def createCliente():
-   bd_response = tb_avaliacao.insert_one({
+    bd_response = tb_avaliacao.insert_one({
         'idPorfissional': 3,
         'idCliente': 3,
         'rating': 7
     })
-   if bd_response:
+    if bd_response:
        return jsonify(result="sucess"),200
-   else:
+    else:
        return jsonify(result="error")
 
 ###########
@@ -408,7 +408,7 @@ def rejeitarMentoria(id):
 
 
 #_Search requests actives
- @app.route('/solicitacao/findByActives/<id>', methods=['GET', 'POST'])
+@app.route('/solicitacao/findByActives/<id>', methods=['GET', 'POST'])
 def edit(id):
     data = tb_solicitacao.find_one({
         "_id": ObjectId(id)
